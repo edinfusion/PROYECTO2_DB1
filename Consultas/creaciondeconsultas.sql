@@ -4,6 +4,7 @@ DROP PROCEDURE if EXISTS consultarDocente; -- 3
 DROP PROCEDURE if EXISTS consultarEstudiantesAsignados; -- 4
 DROP PROCEDURE if EXISTS consultarAprobacion; -- 5
 DROP PROCEDURE if EXISTS consultarActas; -- 6
+DROP PROCEDURE if EXISTS consultarDesasignacion; -- 7
 
 
 -- CONSULTAR PENSUM DE CARREERA (1)
@@ -85,6 +86,24 @@ BEGIN
     WHERE ch.CURSO_cod = codcurso;
 END$$
 delimiter ;
+
+-- CONSULTAR TASA DE DESASIGNACION DE CURSOS (7)
+delimiter $$
+CREATE PROCEDURE consultarDesasignacion(IN codcurso INT, IN ciclo VARCHAR(2), IN anio INT, IN seccion VARCHAR(1))
+BEGIN 
+    SELECT ch.CURSO_cod as CodigodeCurso, ch.seccion as Seccion, 
+    IF (ch.ciclo = '1S', 'PRIMER SEMESTRE', IF (ch.ciclo = '2S', 'SEGUNDO SEMESTRE', IF (ch.ciclo = 'VJ', 'VACACIONES DE JUNIO', 'VACACIONES DE DICIEMBRE'))) as Ciclo,
+    ch.año as Año, a.cantidad as LlevaronCurso, @desasignados := (SELECT COUNT(*) FROM desasignacion WHERE CURSOHABILITADO_id = ch.id) as Desasignados,
+    ROUND((@desasignados / a.cantidad) * 100, 2) as PorcentajeDesasignacion
+    FROM cursohabilitado ch
+    INNER JOIN asignados a
+    ON ch.id = a.CURSOHABILITADO_id
+    INNER JOIN desasignacion d
+    ON ch.id = d.CURSOHABILITADO_id
+    WHERE ch.CURSO_cod = codcurso AND ch.ciclo = ciclo AND ch.año = anio AND ch.seccion = seccion;
+END$$
+delimiter ;
+
 
 
 
