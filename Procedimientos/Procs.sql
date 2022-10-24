@@ -38,6 +38,7 @@ DROP PROCEDURE if EXISTS desasignarCursoEstudiante; -- 8
 DROP PROCEDURE if EXISTS ingresarNotas; -- 9
 DROP PROCEDURE if EXISTS generarActa; -- 10 
 
+
 -- FUNCTION SOLO LETRAS
 CREATE FUNCTION soloLetras(str VARCHAR(100))
 RETURNS BOOLEAN DETERMINISTIC
@@ -319,6 +320,7 @@ proc_estudiante:BEGIN
 		SET fech = curdate();
 		INSERT INTO estudiante(carnet,dpi,nombres,apellidos,fechanacimiento,correo,telefono,direccion,creditos,fecha,CARRERA_id) 
 		VALUES(carnet,dpi,nombres,apellidos,fechan,correo,telefono,direccion,0,fech,carrera);
+		CALL Mensaje('Estudiante registrado correctamente');
 	END $$
 delimiter ;
 
@@ -399,6 +401,7 @@ proc_docente:BEGIN
 		SET fech = curdate();
 		INSERT INTO docente(siif,dpi,nombres,apellidos,fechanacimiento,correo,telefono,direccion,fechacreacion) 
 		VALUES(siif,dpi,noms,apells,fechan,correos,telefono,direccion,fech);
+		CALL Mensaje('Docente registrado correctamente');
 	END $$
 delimiter ;
 
@@ -450,6 +453,7 @@ proc_curso:BEGIN
 		END IF;
 		INSERT INTO curso(cod,nombre,crnecesarios,crotorga,obligatorio,CARRERA_id) 
 		VALUES(Cod,Nomb,CrNecesarios,CrOtorga,obligatorio,idCarrera);
+		CALL Mensaje('Curso registrado correctamente');
 	END $$
 	delimiter ;
 
@@ -505,6 +509,7 @@ proc_habilitar:BEGIN
 		VALUES(codcurso,codDocente,ciclo,seccion,cupoMaximo,añoo);
 		INSERT INTO asignados(CURSOHABILITADO_id,cantidad)
 		VALUES(LAST_INSERT_ID(),0);
+		CALL Mensaje('Curso habilitado correctamente');
 	END $$
 	delimiter ;
 
@@ -539,6 +544,7 @@ proc_horario:BEGIN
 		END IF;
 		INSERT INTO horario(CURSOHABILITADO_id,dia,horario) 
 		VALUES(codcursoh,dia,horario);
+		CALL Mensaje('Horario agregado correctamente');
 	END $$
 	delimiter ;
 
@@ -600,6 +606,7 @@ proc_asignar:BEGIN
 	SELECT asignados.cantidad INTO @cantidad FROM asignados WHERE CURSOHABILITADO_id = @id;
 	UPDATE asignados SET cantidad = @cantidad + 1 WHERE CURSOHABILITADO_id = @id;
 	INSERT INTO asignacion(CURSOHABILITADO_id,ESTUDIANTE_carnet) VALUES(@id,carnet);
+	CALL Mensaje('Asignacion realizada correctamente');
 	END $$
 	delimiter ;
 
