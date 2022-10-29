@@ -602,7 +602,7 @@ proc_asignar:BEGIN
 		CALL Mensaje('Error, No hay cupo disponible');
 		LEAVE proc_asignar;
 	END IF;
-	SELECT id INTO @id FROM cursohabilitado WHERE CURSO_cod = codcurso AND ciclo = ciclo AND seccion = seccion;
+	SELECT id INTO @id FROM cursohabilitado a WHERE a.CURSO_cod = codcurso AND a.ciclo = ciclo AND a.seccion = seccion;
 	SELECT asignados.cantidad INTO @cantidad FROM asignados WHERE CURSOHABILITADO_id = @id;
 	UPDATE asignados SET cantidad = @cantidad + 1 WHERE CURSOHABILITADO_id = @id;
 	INSERT INTO asignacion(CURSOHABILITADO_id,ESTUDIANTE_carnet) VALUES(@id,carnet);
@@ -654,12 +654,13 @@ proc_desasignar:BEGIN
 		CALL Mensaje('Error, El estudiante no se encuentra asignado a ese curso');
 		LEAVE proc_desasignar;
 	END IF;
-	SELECT id INTO @id FROM cursohabilitado WHERE CURSO_cod = codcurso AND ciclo = ciclo
-	AND seccion = seccion;
+	SELECT id INTO @id FROM cursohabilitado a WHERE a.CURSO_cod = codcurso AND a.ciclo = ciclo
+	AND a.seccion = seccion;
 	SELECT asignados.cantidad INTO @cantidad FROM asignados WHERE CURSOHABILITADO_id = @id;
 	UPDATE asignados SET cantidad = @cantidad - 1 WHERE CURSOHABILITADO_id = @id;
 	DELETE FROM asignacion WHERE CURSOHABILITADO_id = @id AND ESTUDIANTE_carnet = carnet;
 	INSERT INTO desasignacion(CURSOHABILITADO_id,ESTUDIANTE_carnet) VALUES(@id,carnet);
+	CALL Mensaje('Desasignacion realizada correctamente');
 	END $$
 	delimiter ;
 
@@ -733,9 +734,10 @@ proc_ingresarNotas:BEGIN
 		SELECT creditos INTO @creditos FROM estudiante WHERE carnet = carnet;
 		UPDATE estudiante SET creditos = @creditos + @crotorga WHERE carnet = carnet;
 	END IF;
-	SELECT id INTO @id FROM cursohabilitado WHERE CURSO_cod = codcurso AND ciclo = ciclo
-	AND seccion = seccion;
+	SELECT id INTO @id FROM cursohabilitado a WHERE a.CURSO_cod = codcurso AND a.ciclo = ciclo
+	AND a.seccion = seccion;
 	INSERT INTO nota(CURSOHABILITADO_id,ESTUDIANTE_carnet,nota) VALUES(@id,carnet,nota);
+	CALL Mensaje('Nota ingresada correctamente');
 	END $$
 	delimiter ;
 
@@ -786,13 +788,14 @@ proc_generarActa:BEGIN
 		CALL Mensaje('Error, El acta ya fue generada anteriormente');
 		LEAVE proc_generarActa;
 	END IF;
-	SELECT id INTO @id FROM cursohabilitado WHERE CURSO_cod = codcurso AND ciclo = ciclo
-	AND seccion = seccion;
+	SELECT id INTO @id FROM cursohabilitado a WHERE a.CURSO_cod = codcurso AND a.ciclo = ciclo
+	AND a.seccion = seccion;
 	-- OBTENER FECHA
 	SELECT CURDATE() INTO @fecha;
 	-- OBTENER HORA
 	SELECT CURTIME() INTO @hora;
 	INSERT INTO acta(fecha, hora, CURSOHABILITADO_id) VALUES(@fecha,@hora,@id);
+	CALL Mensaje('Acta generada correctamente');
 	END $$
 	delimiter ;
 

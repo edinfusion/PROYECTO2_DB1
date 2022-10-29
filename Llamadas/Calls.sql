@@ -2,6 +2,7 @@
 -- SISTEMAS
 CALL registrarEstudiante(201709311,'Edin Emanuel','Montenegro Vasquez','30-10-1999','edinfusion@gmail.com',12345678,'direccion',337859510101,3);
 CALL registrarEstudiante(201109821,'Joel','Santos','3-5-1990','joelsants@gmail.com',12345678,'direcciondejoel',32781580101,3);
+CALL registrarEstudiante(201110822,'Jorge','Santos','3-5-1990','prueba@gmail.com',12345678,'direcciondeprueba',32791580101,3);
 -- CIVIL
 CALL registrarEstudiante(201109822,'Jorge','Santos','3-5-1990','jsants@gmail.com',12345678,'direcciondejorge',3182781580101,1);
 CALL registrarEstudiante(201509823,'Carlos Eduardo','Carrega Aguilar','03-08-1998','carls@gmail.com',12345678,'direcciondecarlos',3181781580101,1);
@@ -25,13 +26,16 @@ CALL crearCarrera('Ingenieria Mecatronica'); -- 6
 CALL crearCarrera('Ingenieria Quimica'); -- 7
 CALL crearCarrera('Ingenieria Ambiental'); -- 8
 CALL crearCarrera('Ingenieria Materiales'); -- 9
+CALL crearCarrera('Ingenieria Textil'); -- 10
 
 -- AGREGAR DOCENTE(3)
+-- nombres, apellidos, fechaNacimiento, email, telefono, direccion, dpi, registrosiif
 CALL registrarDocente('Docente1','Apellido1','30-10-1999','aadf@ingenieria.usac.edu.gt',12345678,'direccion',12345678910,1);
 CALL registrarDocente('Docente2','Apellido2','20-11-1999','docente2@ingenieria.usac.edu.gt',12345678,'direcciondocente2',12345678911,2);
 CALL registrarDocente('Docente3','Apellido3','20-12-1980','docente3@ingenieria.usac.edu.gt',12345678,'direcciondocente3',12345678912,3);
 CALL registrarDocente('Docente4','Apellido4','20-11-1981','docente4@ingenieria.usac.edu.gt',12345678,'direcciondocente4',12345678913,4);
 CALL registrarDocente('Docente5','Apellido5','20-09-1982','docente5@ingenieria.usac.edu.gt',12345678,'direcciondocente5',12345678914,5);
+CALL registrarDocente('Docente6','Apellido6','20-08-1983','docente6@ingenieria.usac.edu.gt',12345698,'direcciondocente6',12345678915,6);
 
 -- AGREGAR CURSO(4)
 -- codigo, nombre, crn, cro, idcarrera, obligatorio
@@ -43,6 +47,7 @@ CALL crearCurso(103,'MB 2',0,7,0,true);
 CALL crearCurso(017,'SOCIAL HUMANISTICA 1',0,4,0,true); 
 CALL crearCurso(019,'SOCIAL HUMANISTICA 2',0,4,0,true); 
 CALL crearCurso(348,'QUIMICA GENERAL',0,3,0,true); 
+CALL crearCurso(349,'QUIMICA GENERAL LABORATORIO',0,1,0,true);
 -- INGENIERIA EN SISTEMAS
 CALL crearCurso(777,'Compiladores 1',80,4,3,true); 
 CALL crearCurso(770,'INTR. A la Programacion y computacion 1',0,4,3,true); 
@@ -76,10 +81,12 @@ CALL habilitarCurso(101,'2S',1,110,'A');
 -- AGREGAR HORARIO DE CURSO HABILITADO(6)
 -- codcursohabiltado, dia, horario
 CALL agregarHorario(1,3,"9:00-10:40");
+CALL agregarHorario(2,3,"9:00-10:40");
 -- ASIGNAR CURSO ESTUDIANTE(7)
 -- codcurso, ciclo, seccion, carnet
 CALL asignarCursoEstudiante(101,'2S','a',201709311);
 CALL asignarCursoEstudiante(101,'2S','a',201109821);
+CALL asignarCursoEstudiante(101,'1S','a',201109822);
 -- DESASIGNAR CURSO ESTUDIANTE(8)
 -- codcurso, ciclo, seccion, carnet
 CALL desasignarCursoEstudiante(101,'1S','a',201709311);
